@@ -1,4 +1,8 @@
 ## NextJS - Hardhat Template for DApp applications
+1. FrontEnd: NextJS, web3-rect, ChakraUI
+2. BackEnd: Solidity, Hardhat, ethers
+
+
 
 ### Steps
 1. npx create-next-app@13.4.19 (name: nextjs-hardhat template)
@@ -9,3 +13,4 @@
 6. npx hardhat test
 7. npx hardhat node
 8. npx hardhat run scripts/deploy.js --network localhost
+9. 
