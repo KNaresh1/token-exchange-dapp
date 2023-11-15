@@ -1,6 +1,6 @@
 import { Flex, Spacer, Text } from "@chakra-ui/react";
 import Image from "next/image";
-import logo from "../public/logo.png";
+import logo from "../../public/logo.png";
 
 const NavBar = ({ account }: { account: string | undefined }) => {
   return (
