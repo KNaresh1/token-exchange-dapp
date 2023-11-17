@@ -1,31 +1,20 @@
 "use client";
 
-import { Box, Heading, Spinner, Text } from "@chakra-ui/react";
-import { NavBar } from "./components";
-import { useConnectWallet, useLoadContract } from "./hooks";
+import { Box, Heading, Text } from "@chakra-ui/react";
+import useLoadContract from "./hooks";
 
 export default function Home() {
-  const { account, loading: walletLoading } = useConnectWallet();
-  const { token, loading: contractLoading } = useLoadContract();
+  const { token } = useLoadContract();
 
   return (
-    <Box textAlign="center" py={8} width="80%">
-      <NavBar account={account} />
-
+    <Box textAlign="center">
       <Heading as="h6" size="lg" m={8}>
         NextJS Hardhat Template
       </Heading>
 
-      {walletLoading || contractLoading ? (
-        <Spinner
-          thickness="5px"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      ) : (
+      {token && (
         <Box mt={8}>
-          <Text size="sm">Welcome!!</Text>
+          <Text size="sm">Token address : {token.address}</Text>
         </Box>
       )}
     </Box>
