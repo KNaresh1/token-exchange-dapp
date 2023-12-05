@@ -1,6 +1,8 @@
 ## NextJS - Hardhat Template for DApp applications
-1. FrontEnd: NextJS, web3-rect, ChakraUI
-2. BackEnd: Solidity, Hardhat, ethers
+
+### End-to-End technology stack
+1. FrontEnd: NextJS (UI and user interactions), web3-react (interact with smart contract deployed in blockchain), zustand (state management), ChakraUI (css styling)
+2. BackEnd: Solidity (Implement smart contracts), Hardhat (deploy, run and test), ethers
 
 
 

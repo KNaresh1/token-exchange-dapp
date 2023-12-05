@@ -1,21 +1,24 @@
 "use client";
 
 import { Box, Heading, Text } from "@chakra-ui/react";
-import useLoadContract from "./hooks";
+import { useWeb3React } from "@web3-react/core";
+import useLoadContract from "./connect";
+import Token from "./token";
 
 export default function Home() {
-  const { token } = useLoadContract();
+  const { account } = useWeb3React();
+  useLoadContract();
 
   return (
-    <Box textAlign="center">
-      <Heading as="h6" size="lg" m={8}>
-        NextJS Hardhat Template
-      </Heading>
+    <Box py={6} textAlign="center">
+      <Heading size="lg">NextJS Hardhat Template</Heading>
 
-      {token && (
-        <Box mt={8}>
-          <Text size="sm">Token address : {token.address}</Text>
-        </Box>
+      {account ? (
+        <Token />
+      ) : (
+        <Text align="center" fontSize="lg" mt={3}>
+          Please connect to Wallet...
+        </Text>
       )}
     </Box>
   );

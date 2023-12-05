@@ -1,7 +1,7 @@
 {
-    "31337": {
-        "token": {
-            "address": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+    "chains": {
+        "31337": {
+            "tokenAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
         }
     }
 }
