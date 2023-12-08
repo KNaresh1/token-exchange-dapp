@@ -5,7 +5,7 @@ const tokens = (n) => {
   return ethers.utils.parseUnits(n.toString(), "ether");
 };
 
-describe("Token contract", () => {
+describe("Token", () => {
   let token, deployer, receiver, exchange;
 
   beforeEach(async () => {
