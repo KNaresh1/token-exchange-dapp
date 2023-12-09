@@ -1,7 +1,10 @@
 {
     "chains": {
         "31337": {
-            "tokenAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+            "exchangeAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+            "dappAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+            "mETHAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+            "mDAIAddress": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
         }
     }
 }

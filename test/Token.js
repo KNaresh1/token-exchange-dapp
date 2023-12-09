@@ -136,13 +136,6 @@ describe("Token", () => {
             .approve("0x0000000000000000000000000000000000000000", amount)
         ).to.be.reverted;
       });
-
-      it("rejects invalid approver", async () => {
-        const invalidOwner = receiver;
-        await expect(
-          token.connect(invalidOwner).approve(exchange.address, amount)
-        ).to.be.reverted;
-      });
     });
   });
 

@@ -2,11 +2,11 @@ import { Box, Text } from "@chakra-ui/react";
 import useContractStore from "../store";
 
 const Token = () => {
-  const token = useContractStore((s) => s.token);
+  const dapp = useContractStore((s) => s.dapp);
 
   return (
     <Box mt={8}>
-      <Text size="sm">Token address : {token.address}</Text>
+      <Text size="sm">DAPP address : {dapp.address}</Text>
     </Box>
   );
 };

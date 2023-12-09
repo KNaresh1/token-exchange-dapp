@@ -15,14 +15,14 @@ const NavBar = () => {
   } = useConnectWallet();
 
   return (
-    <Flex align="center" gap="3" p={3}>
-      <Image src={logo} alt="Logo" style={{ width: "40px", height: "40px" }} />
-      <Text fontSize="lg">DApp Template</Text>
+    <Flex align="center" gap="2">
+      <Image src={logo} alt="Logo" style={{ width: "30px", height: "30px" }} />
+      <Text fontSize="sm">DApp Token Exchange</Text>
 
       <Spacer />
 
       {isActive && account ? (
-        <Text fontSize="md">{shortenAccount(account)}</Text>
+        <Text fontSize="sm">{shortenAccount(account)}</Text>
       ) : (
         <Button
           colorScheme="blue"

@@ -9,19 +9,19 @@ import useContractStore from "../store";
 const useLoadContract = () => {
   const { provider, account, chainId } = useWeb3React();
 
-  const [setToken] = useContractStore((s) => [s.setToken]);
+  const [setDapp] = useContractStore((s) => [s.setDapp]);
 
   const currentChainConfig = config.chains[chainId?.toString() || ""];
 
   const loadContract = async () => {
     try {
-      // TOKEN
-      const token = new Contract(
-        currentChainConfig.tokenAddress,
+      // TOKENS
+      const dapp = new Contract(
+        currentChainConfig.dappAddress,
         TOKEN_ABI,
         provider
       );
-      setToken(token);
+      setDapp(dapp);
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }

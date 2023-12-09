@@ -3,13 +3,13 @@ import { mountStoreDevtool } from "simple-zustand-devtools";
 import { create } from "zustand";
 
 interface TokenStore {
-  token: Contract;
-  setToken: (token: Contract) => void;
+  dapp: Contract;
+  setDapp: (dapp: Contract) => void;
 }
 
 const useContractStore = create<TokenStore>((set) => ({
-  token: {} as Contract,
-  setToken: (token) => set(() => ({ token })),
+  dapp: {} as Contract,
+  setDapp: (dapp) => set(() => ({ dapp })),
 }));
 
 if (process.env.NODE_ENV === "development") {

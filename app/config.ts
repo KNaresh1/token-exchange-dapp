@@ -1,7 +1,10 @@
 import config from "./config.json";
 
 interface ChainConfig {
-  tokenAddress: string;
+  exchangeAddress: string;
+  dappAddress: string;
+  mETHAddress: string;
+  mDAIAddress: string;
 }
 
 interface AppConfig {

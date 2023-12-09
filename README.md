@@ -1,4 +1,4 @@
-## NextJS - Hardhat Template for DApp applications
+## Decentralized Token Exchange App
 
 ### End-to-End technology stack
 1. FrontEnd: NextJS (UI and user interactions), web3-react (interact with smart contract deployed in blockchain), zustand (state management), ChakraUI (css styling)
@@ -15,4 +15,3 @@
 6. npx hardhat test
 7. npx hardhat node
 8. npx hardhat run scripts/deploy.js --network localhost
-9. 
