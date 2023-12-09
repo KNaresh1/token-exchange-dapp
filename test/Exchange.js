@@ -11,7 +11,7 @@ describe("Exchange", () => {
   const feePercent = 10;
 
   beforeEach(async () => {
-    [deployer, feeAccount, user1] = await ethers.getSigners();
+    [deployer, feeAccount, user1, user2] = await ethers.getSigners();
 
     const Token = await ethers.getContractFactory("Token");
     token1 = await Token.deploy("Dapp Token", "DAPP", 1000000);
@@ -220,6 +220,76 @@ describe("Exchange", () => {
             .connect(user1)
             .makeOrder(token2.address, amount, token1.address, amount)
         ).to.be.reverted;
+      });
+    });
+  });
+
+  describe("Order Actions", () => {
+    let transaction, result;
+    let amount = tokens(1);
+
+    beforeEach(async () => {
+      transaction = await token1
+        .connect(user1)
+        .approve(exchange.address, amount);
+      result = await transaction.wait();
+
+      transaction = await exchange
+        .connect(user1)
+        .depositToken(token1.address, amount);
+      result = await transaction.wait();
+
+      transaction = await exchange
+        .connect(user1)
+        .makeOrder(token2.address, amount, token1.address, amount);
+      result = await transaction.wait();
+    });
+
+    describe("Cancelling Orders", () => {
+      describe("Success", () => {
+        beforeEach(async () => {
+          transaction = await exchange.connect(user1).cancelOrder(1);
+          result = await transaction.wait();
+        });
+
+        it("updates cancelled orders", async () => {
+          expect(await exchange.orderCancelled(1)).to.equal(true);
+        });
+
+        it("emits a CancelOrder event", async () => {
+          const [event] = result.events;
+          expect(event.event).to.equal("CancelOrder");
+
+          const {
+            args: {
+              id,
+              user,
+              tokenGet,
+              amountGet,
+              tokenGive,
+              amountGive,
+              timestamp,
+            },
+          } = event;
+          expect(id).to.equal(1);
+          expect(user).to.equal(user1.address);
+          expect(tokenGet).to.equal(token2.address);
+          expect(amountGet).to.equal(amount);
+          expect(tokenGive).to.equal(token1.address);
+          expect(amountGive).to.equal(amount);
+          expect(timestamp).to.at.least(1);
+        });
+      });
+
+      describe("Failure", () => {
+        it("rejects invalid order id", async () => {
+          await expect(exchange.connect(user1).cancelOrder(9999)).to.be
+            .reverted;
+        });
+
+        it("rejects unauthorized cancellations", async () => {
+          await expect(exchange.connect(user2).cancelOrder(1)).to.be.reverted;
+        });
       });
     });
   });

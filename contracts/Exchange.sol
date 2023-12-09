@@ -21,6 +21,7 @@ contract Exchange {
 
     mapping(address => mapping(address => uint256)) public tokens;
     mapping(uint256 => _Order) public orders;
+    mapping(uint256 => bool) public orderCancelled;
 
     event Deposit(address token, address user, uint256 amount, uint256 balance);
 
@@ -32,6 +33,16 @@ contract Exchange {
     );
 
     event Order(
+        uint256 id,
+        address user,
+        address tokenGet,
+        uint256 amountGet,
+        address tokenGive,
+        uint256 amountGive,
+        uint256 timestamp
+    );
+
+    event CancelOrder(
         uint256 id,
         address user,
         address tokenGet,
@@ -119,6 +130,29 @@ contract Exchange {
             _amountGet,
             _tokenGive,
             _amountGive,
+            block.timestamp
+        );
+    }
+
+    function cancelOrder(uint256 _id) public {
+        _Order storage _order = orders[_id];
+
+        require(
+            address(_order.user) == msg.sender,
+            "User not authorized to cancel the order"
+        );
+
+        require(_order.id == _id, "Order does not exist to cancel");
+
+        orderCancelled[_id] = true;
+
+        emit CancelOrder(
+            orderCount,
+            msg.sender,
+            _order.tokenGet,
+            _order.amountGet,
+            _order.tokenGive,
+            _order.amountGive,
             block.timestamp
         );
     }
