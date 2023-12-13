@@ -3,7 +3,7 @@
 import { useWeb3React } from "@web3-react/core";
 import { useState } from "react";
 
-export function useConnectWallet() {
+export function useConnectWallet(selectedChainId: number) {
   const { connector, isActive, account } = useWeb3React();
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +13,7 @@ export function useConnectWallet() {
     try {
       setLoading(true);
 
-      await connector.activate({ chainId: 31337 });
+      await connector.activate({ chainId: selectedChainId });
       setActive(true);
     } catch (error) {
       console.error(`Error while connecting to wallet. ${error}`);

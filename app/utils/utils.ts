@@ -8,6 +8,10 @@ export const parseUnits = (value: string) => {
   return ethers.utils.parseUnits(value.toString(), "ether");
 };
 
+export const formatEther = (value: string) => {
+  return ethers.utils.formatEther(value.toString());
+};
+
 export const shortenAccount = (account: string) => {
   return `${account.substring(0, 6)}...${account.substring(
     account.length - 4

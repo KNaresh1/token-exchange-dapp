@@ -1,3 +1,3 @@
-export const loadBalance = () => {
+export const loadToken = () => {
   console.log("Load Balance...");
 };

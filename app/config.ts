@@ -5,6 +5,7 @@ interface ChainConfig {
   dappAddress: string;
   mETHAddress: string;
   mDAIAddress: string;
+  explorerURL: string;
 }
 
 interface AppConfig {
