@@ -45,11 +45,11 @@ const NavBar = () => {
         border={0}
         width={120}
         size="sm"
-        value={selectedChainId}
         borderColor="transparent"
         focusBorderColor="transparent"
         iconColor="white"
         fontWeight="semibold"
+        value={selectedChainId}
         onChange={(e) => handleChainChange(Number(e.target.value))}
       >
         {supportedNetworks.map((network, index) => (
@@ -100,8 +100,8 @@ const NavBar = () => {
         </Flex>
       ) : (
         <Button
-          px={4}
-          py={3}
+          px={5}
+          py={4}
           colorScheme="blue"
           variant="outline"
           size="sm"

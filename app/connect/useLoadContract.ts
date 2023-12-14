@@ -3,10 +3,9 @@ import { Contract } from "ethers";
 import { useEffect } from "react";
 
 import EXCHANGE_ABI from "../abis/Exchange.json";
-import TOKEN_ABI from "../abis/Token.json";
 import config from "../config";
 import useContractStore from "../store";
-import { formatEther } from "../utils";
+import { formatEther, loadExchangeTokens } from "../utils";
 
 const useLoadContract = () => {
   const { provider, account, chainId } = useWeb3React();
@@ -19,19 +18,12 @@ const useLoadContract = () => {
 
   const loadContract = async () => {
     try {
-      // TOKENS
-      const dapp = new Contract(
-        currentChainConfig.dappAddress,
-        TOKEN_ABI,
-        provider
+      await loadExchangeTokens(
+        provider,
+        [currentChainConfig.dappAddress, currentChainConfig.mETHAddress],
+        loadTokens,
+        loadSymbols
       );
-      const mETH = new Contract(
-        currentChainConfig.mETHAddress,
-        TOKEN_ABI,
-        provider
-      );
-      loadTokens([dapp, mETH]);
-      loadSymbols([await dapp.symbol(), await mETH.symbol()]);
 
       // Exchange
       const exchange = new Contract(
