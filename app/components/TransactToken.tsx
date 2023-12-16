@@ -17,28 +17,30 @@ import { FaChevronRight } from "react-icons/fa";
 import ethLogo from "../../public/eth.png";
 import dappLogo from "../../public/logo.png";
 import useContractStore from "../store";
-import { depositTokens } from "../utils";
+import { transactTokens } from "../utils";
 
-interface DepositTokenProps {
+interface TransactTokenProps {
   token: any;
   symbol: string;
   tokenBalance: string;
   exchangeBalance: string;
+  transactionType: string;
 }
 
-const DepositToken = ({
+const TransactToken = ({
   token,
   symbol,
   tokenBalance,
   exchangeBalance,
-}: DepositTokenProps) => {
+  transactionType,
+}: TransactTokenProps) => {
   const { provider } = useWeb3React();
 
-  const [depositAmount, setDepositAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
 
-  const [exchange, setDepositStatus] = useContractStore((s) => [
+  const [exchange, setTransactionStatus] = useContractStore((s) => [
     s.exchange,
-    s.setDepositStatus,
+    s.setTransactionStatus,
   ]);
 
   const {
@@ -46,13 +48,20 @@ const DepositToken = ({
     formState: { isSubmitting },
   } = useForm();
 
-  const depositAmountHandler = (value: number) => {
-    setDepositAmount(value);
+  const amountHandler = (value: number) => {
+    setAmount(value);
   };
 
-  const depositHandler = handleSubmit(async () => {
-    depositTokens(provider, token, exchange, depositAmount, setDepositStatus);
-    setDepositAmount(0);
+  const transactionHandler = handleSubmit(async () => {
+    await transactTokens(
+      provider,
+      token,
+      exchange,
+      amount,
+      transactionType,
+      setTransactionStatus
+    );
+    setAmount(0);
   });
 
   return (
@@ -70,14 +79,14 @@ const DepositToken = ({
           {symbol && (
             <Flex gap={1} align="center">
               <Image
-                src={symbol === "mETH" ? ethLogo : dappLogo}
+                src={symbol === "DAPP" ? dappLogo : ethLogo}
                 alt="Logo"
                 style={{
-                  width: symbol === "mETH" ? "20px" : "10px",
-                  height: symbol === "mETH" ? "20px" : "10px",
+                  width: symbol === "DAPP" ? "10px" : "20px",
+                  height: symbol === "DAPP" ? "10px" : "20px",
                 }}
               />
-              <Text fontSize="xs">{symbol}</Text>
+              <Text fontSize="sm">{symbol}</Text>
             </Flex>
           )}
         </Stack>
@@ -85,33 +94,30 @@ const DepositToken = ({
           <Text fontSize="xs" color="neutral" mb={-1}>
             Wallet
           </Text>
-          <Text fontSize="xs">{tokenBalance}</Text>
+          <Text fontSize="sm">{tokenBalance}</Text>
         </Stack>
         <Stack>
           <Text fontSize="xs" color="neutral" mb={-1}>
             Exchange
           </Text>
-          <Text fontSize="xs">{exchangeBalance}</Text>
+          <Text fontSize="sm">{exchangeBalance}</Text>
         </Stack>
       </HStack>
       <Box>
-        <form onSubmit={depositHandler}>
+        <form onSubmit={transactionHandler}>
           <FormControl>
             <Text fontSize="sm" mb={1}>
               {symbol} Amount
             </Text>
           </FormControl>
           <FormControl>
-            <NumberInput
-              size="sm"
-              value={depositAmount === 0 ? "" : depositAmount}
-            >
+            <NumberInput size="sm" value={amount === 0 ? "" : amount}>
               <NumberInputField
                 rounded={8}
                 border="0px"
                 bg="primary"
                 placeholder="0.0000"
-                onChange={(e) => depositAmountHandler(Number(e.target.value))}
+                onChange={(e) => amountHandler(Number(e.target.value))}
               />
             </NumberInput>
           </FormControl>
@@ -123,12 +129,12 @@ const DepositToken = ({
             variant="outline"
             colorScheme="blue"
             isLoading={isSubmitting}
-            loadingText="Depositing"
+            loadingText={`${transactionType}ing`}
             rightIcon={<FaChevronRight />}
-            isDisabled={depositAmount <= 0}
+            isDisabled={amount <= 0}
             type="submit"
           >
-            Deposit
+            {transactionType}
           </Button>
         </form>
       </Box>
@@ -136,4 +142,4 @@ const DepositToken = ({
   );
 };
 
-export default DepositToken;
+export default TransactToken;

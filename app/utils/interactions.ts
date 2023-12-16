@@ -36,18 +36,18 @@ export const loadUserBalances = async (
   loadExchangeBalances([balance1, balance2]);
 };
 
-export const depositTokens = async (
+export const transactTokens = async (
   provider: any,
   token: Contract,
   exchange: Contract,
   amount: number,
-  setDepositStatus: (depositStatus: IStatus) => void
+  transactionType: string,
+  setTransactionStatus: (transactionStatus: IStatus) => void
 ) => {
   let transaction;
 
-  setDepositStatus({
+  setTransactionStatus({
     status: "INPROGRESS",
-    transactionHash: undefined,
     event: undefined,
   });
   try {
@@ -55,19 +55,24 @@ export const depositTokens = async (
 
     const transferAmount = parseUnits(amount);
 
-    transaction = await token
-      .connect(signer)
-      .approve(exchange.address, transferAmount);
-    await transaction.wait();
+    if (transactionType === "Deposit") {
+      transaction = await token
+        .connect(signer)
+        .approve(exchange.address, transferAmount);
+      await transaction.wait();
 
-    transaction = await exchange
-      .connect(signer)
-      .depositToken(token.address, transferAmount);
+      transaction = await exchange
+        .connect(signer)
+        .depositToken(token.address, transferAmount);
+    } else {
+      transaction = await exchange
+        .connect(signer)
+        .withdrawToken(token.address, transferAmount);
+    }
     await transaction.wait();
   } catch (error) {
-    setDepositStatus({
+    setTransactionStatus({
       status: "ERROR",
-      transactionHash: undefined,
       event: undefined,
     });
     console.log("Error while depositing tokens. ", error);
@@ -76,12 +81,18 @@ export const depositTokens = async (
 
 export const subscribeToEvents = (
   exchange: Contract,
-  setDepositStatus: (depositStatus: IStatus) => void
+  setTransactionStatus: (transactionStatus: IStatus) => void
 ) => {
   exchange.on("Deposit", ({ event }) => {
-    setDepositStatus({
+    setTransactionStatus({
       status: "SUCCESS",
-      transactionHash: undefined,
+      event: event,
+    });
+  });
+
+  exchange.on("Withdraw", ({ event }) => {
+    setTransactionStatus({
+      status: "SUCCESS",
       event: event,
     });
   });

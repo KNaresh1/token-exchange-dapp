@@ -1,4 +1,4 @@
-import { Box, Divider, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Select, Stack, Text } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import { useState } from "react";
 import config from "../config";
@@ -60,8 +60,6 @@ const Markets = () => {
           <Text fontSize="sm">No Network</Text>
         </Box>
       )}
-
-      <Divider mt={5} mb={4} borderColor="gray.600" />
     </Stack>
   );
 };

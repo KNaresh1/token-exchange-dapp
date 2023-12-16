@@ -37,20 +37,20 @@ const createTokenSlice: StateCreator<TokenSlice> = (set) => ({
 
 interface ExchangeSlice {
   exchange: Contract;
-  depositStatus: IStatus;
+  transactionStatus: IStatus;
   loadExchange: (exchange: Contract) => void;
-  setDepositStatus: (depositStatus: IStatus) => void;
+  setTransactionStatus: (transactionStatus: IStatus) => void;
 }
 
 const createExchangeSlice: StateCreator<ExchangeSlice> = (set) => ({
   exchange: {} as Contract,
-  depositStatus: {
+  transactionStatus: {
     status: "INITIAL",
-    transactionHash: undefined,
     event: undefined,
   },
   loadExchange: (exchange) => set(() => ({ exchange })),
-  setDepositStatus: (depositStatus) => set(() => ({ depositStatus })),
+  setTransactionStatus: (transactionStatus) =>
+    set(() => ({ transactionStatus })),
 });
 
 const useContractStore = create<AccountSlice & TokenSlice & ExchangeSlice>()(

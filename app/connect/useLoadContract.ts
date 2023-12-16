@@ -10,14 +10,19 @@ import { formatEther, loadExchangeTokens, subscribeToEvents } from "../utils";
 const useLoadContract = () => {
   const { provider, account, chainId } = useWeb3React();
 
-  const [loadBalance, loadTokens, loadSymbols, loadExchange, setDepositStatus] =
-    useContractStore((s) => [
-      s.loadBalance,
-      s.loadTokens,
-      s.loadSymbols,
-      s.loadExchange,
-      s.setDepositStatus,
-    ]);
+  const [
+    loadBalance,
+    loadTokens,
+    loadSymbols,
+    loadExchange,
+    setTransactionStatus,
+  ] = useContractStore((s) => [
+    s.loadBalance,
+    s.loadTokens,
+    s.loadSymbols,
+    s.loadExchange,
+    s.setTransactionStatus,
+  ]);
 
   const currentChainConfig = config.chains[chainId?.toString() || ""];
 
@@ -43,7 +48,7 @@ const useLoadContract = () => {
         const acctBalance = await provider.getBalance(account);
         loadBalance(formatEther(acctBalance.toString()));
       }
-      subscribeToEvents(exchange, setDepositStatus);
+      subscribeToEvents(exchange, setTransactionStatus);
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }
