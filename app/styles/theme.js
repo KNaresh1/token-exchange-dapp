@@ -11,6 +11,7 @@ const theme = extendTheme({
   colors: {
     primary: "#0D121D",
     secondary: "#121A29",
+    neutral: "#767F92",
   },
 });
 

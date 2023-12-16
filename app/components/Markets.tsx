@@ -1,4 +1,4 @@
-import { Divider, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Divider, Select, Stack, Text } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import { useState } from "react";
 import config from "../config";
@@ -30,10 +30,13 @@ const Markets = () => {
         <Select
           p={0}
           border={0}
-          size="sm"
+          size="xs"
           borderColor="transparent"
           focusBorderColor="transparent"
           iconColor="white"
+          fontWeight="semibold"
+          bg="primary"
+          height={8}
           value={selectedTokenPair}
           onChange={(e) => marketHandler(e.target.value)}
         >
@@ -53,10 +56,12 @@ const Markets = () => {
           </option>
         </Select>
       ) : (
-        <Text fontSize="sm">No Network</Text>
+        <Box height={8}>
+          <Text fontSize="sm">No Network</Text>
+        </Box>
       )}
 
-      <Divider mt={6} mb={4} borderColor="gray.600" />
+      <Divider mt={5} mb={4} borderColor="gray.600" />
     </Stack>
   );
 };

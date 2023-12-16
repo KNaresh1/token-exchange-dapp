@@ -4,12 +4,16 @@ export const formatUnits = (value: string) => {
   return ethers.utils.formatUnits(value, 18);
 };
 
-export const parseUnits = (value: string) => {
-  return ethers.utils.parseUnits(value.toString(), "ether");
+export const parseUnits = (value: number) => {
+  return ethers.utils.parseUnits(value.toString(), 18);
+};
+
+export const parseEther = (value: string) => {
+  return ethers.utils.parseUnits(value, "ether");
 };
 
 export const formatEther = (value: string) => {
-  return ethers.utils.formatEther(value.toString());
+  return ethers.utils.formatEther(value);
 };
 
 export const shortenAccount = (account: string) => {

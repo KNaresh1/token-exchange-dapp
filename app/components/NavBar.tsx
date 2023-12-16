@@ -34,35 +34,37 @@ const NavBar = () => {
   };
 
   return (
-    <Flex align="center" gap={1}>
-      <Image
-        src={ethLogo}
-        alt="ETH Logo"
-        style={{ width: "20px", height: "20px" }}
-      />
-      <Select
-        p={0}
-        border={0}
-        width={120}
-        size="sm"
-        borderColor="transparent"
-        focusBorderColor="transparent"
-        iconColor="white"
-        fontWeight="semibold"
-        value={selectedChainId}
-        onChange={(e) => handleChainChange(Number(e.target.value))}
-      >
-        {supportedNetworks.map((network, index) => (
-          <option key={index} value={network.value}>
-            {network.label}
-          </option>
-        ))}
-      </Select>
+    <Flex align="center" gap={1} height={8}>
+      <Flex bg="secondary" alignItems="center">
+        <Image
+          src={ethLogo}
+          alt="ETH Logo"
+          style={{ width: "20px", height: "20px" }}
+        />
+        <Select
+          p={0}
+          border={0}
+          width={120}
+          size="sm"
+          borderColor="transparent"
+          focusBorderColor="transparent"
+          iconColor="white"
+          fontWeight="semibold"
+          value={selectedChainId}
+          onChange={(e) => handleChainChange(Number(e.target.value))}
+        >
+          {supportedNetworks.map((network, index) => (
+            <option key={index} value={network.value}>
+              {network.label}
+            </option>
+          ))}
+        </Select>
+      </Flex>
 
       <Spacer />
       <Flex
         px={3}
-        py={2}
+        py={3}
         gap={1}
         bg="secondary"
         borderRadius="8"
@@ -83,7 +85,7 @@ const NavBar = () => {
         <Flex
           px={3}
           py={2}
-          gap={2}
+          gap={3}
           bg="secondary"
           borderRadius="8"
           flexDirection="row"
@@ -100,11 +102,12 @@ const NavBar = () => {
         </Flex>
       ) : (
         <Button
-          px={5}
+          px={8}
           py={4}
           colorScheme="blue"
           variant="outline"
           size="sm"
+          ml={2}
           isLoading={isConnecting}
           loadingText={"Connecting"}
           onClick={() => connectWallet()}

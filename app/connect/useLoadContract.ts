@@ -5,14 +5,19 @@ import { useEffect } from "react";
 import EXCHANGE_ABI from "../abis/Exchange.json";
 import config from "../config";
 import useContractStore from "../store";
-import { formatEther, loadExchangeTokens } from "../utils";
+import { formatEther, loadExchangeTokens, subscribeToEvents } from "../utils";
 
 const useLoadContract = () => {
   const { provider, account, chainId } = useWeb3React();
 
-  const [loadBalance, loadTokens, loadSymbols, loadExchange] = useContractStore(
-    (s) => [s.loadBalance, s.loadTokens, s.loadSymbols, s.loadExchange]
-  );
+  const [loadBalance, loadTokens, loadSymbols, loadExchange, setDepositStatus] =
+    useContractStore((s) => [
+      s.loadBalance,
+      s.loadTokens,
+      s.loadSymbols,
+      s.loadExchange,
+      s.setDepositStatus,
+    ]);
 
   const currentChainConfig = config.chains[chainId?.toString() || ""];
 
@@ -38,6 +43,7 @@ const useLoadContract = () => {
         const acctBalance = await provider.getBalance(account);
         loadBalance(formatEther(acctBalance.toString()));
       }
+      subscribeToEvents(exchange, setDepositStatus);
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }
