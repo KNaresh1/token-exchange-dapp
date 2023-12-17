@@ -113,7 +113,7 @@ const TransactToken = ({
           <FormControl>
             <NumberInput size="sm" value={amount === 0 ? "" : amount}>
               <NumberInputField
-                rounded={8}
+                rounded={6}
                 border="0px"
                 bg="primary"
                 placeholder="0.0000"

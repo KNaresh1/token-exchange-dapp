@@ -2,5 +2,10 @@ export type STATUS_TYPE = "INITIAL" | "INPROGRESS" | "SUCCESS" | "ERROR";
 
 export interface IStatus {
   status: STATUS_TYPE;
-  event: any;
+  transactionType: string;
+}
+
+export interface OrderInfo {
+  amount: number;
+  price: number;
 }

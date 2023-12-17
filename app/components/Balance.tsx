@@ -59,23 +59,24 @@ const Balance = () => {
           Balance
         </Text>
         <Spacer />
-        <Button
-          p={3}
-          size="xs"
-          colorScheme={activeTab === "Deposit" ? "blue" : ""}
-          onClick={() => setActiveTab("Deposit")}
-        >
-          Deposit
-        </Button>
-        <Button
-          p={3}
-          ml={-3}
-          size="xs"
-          colorScheme={activeTab === "Withdraw" ? "blue" : ""}
-          onClick={() => setActiveTab("Withdraw")}
-        >
-          Withdraw
-        </Button>
+        <Box bg="primary" rounded={6}>
+          <Button
+            p={3}
+            size="xs"
+            colorScheme={activeTab === "Deposit" ? "blue" : ""}
+            onClick={() => setActiveTab("Deposit")}
+          >
+            Deposit
+          </Button>
+          <Button
+            p={3}
+            size="xs"
+            colorScheme={activeTab === "Withdraw" ? "blue" : ""}
+            onClick={() => setActiveTab("Withdraw")}
+          >
+            Withdraw
+          </Button>
+        </Box>
       </HStack>
       <Tabs>
         <TabPanels>

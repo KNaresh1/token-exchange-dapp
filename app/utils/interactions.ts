@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 import TOKEN_ABI from "../abis/Token.json";
-import { IStatus } from "./types";
+import { IStatus, OrderInfo } from "./types";
 import { formatUnits, parseUnits } from "./utils";
 
 export const loadExchangeTokens = async (
@@ -48,7 +48,7 @@ export const transactTokens = async (
 
   setTransactionStatus({
     status: "INPROGRESS",
-    event: undefined,
+    transactionType: "Transfer",
   });
   try {
     const signer = await provider.getSigner();
@@ -73,27 +73,92 @@ export const transactTokens = async (
   } catch (error) {
     setTransactionStatus({
       status: "ERROR",
-      event: undefined,
+      transactionType: "Transfer",
     });
-    console.log("Error while depositing tokens. ", error);
+    console.log("Error while transacting tokens. ", error);
+  }
+};
+
+export const makeOrder = async (
+  provider: any,
+  tokens: Contract[],
+  exchange: Contract,
+  order: OrderInfo,
+  orderType: string,
+  setTransactionStatus: (transactionStatus: IStatus) => void
+) => {
+  let transaction;
+
+  // The parms like tokenGet, amountGet, tokenGive & amountGive for Sell order is reverse of Buy order
+  const tokenGet = orderType === "Buy" ? tokens[1].address : tokens[0].address;
+  const amountGet = parseUnits(
+    orderType === "Buy" ? order.amount : order.amount * order.price
+  );
+  const tokenGive = orderType === "Buy" ? tokens[0].address : tokens[1].address;
+  const amountGive = parseUnits(
+    orderType === "Buy" ? order.amount * order.price : order.amount
+  );
+
+  setTransactionStatus({
+    status: "INPROGRESS",
+    transactionType: "New Order",
+  });
+  try {
+    const signer = await provider.getSigner();
+
+    transaction = await exchange
+      .connect(signer)
+      .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
+    await transaction.wait();
+  } catch (error) {
+    setTransactionStatus({
+      status: "ERROR",
+      transactionType: "New Order",
+    });
+    console.log("Error while making buy order tokens. ", error);
   }
 };
 
 export const subscribeToEvents = (
   exchange: Contract,
-  setTransactionStatus: (transactionStatus: IStatus) => void
+  setTransactionStatus: (transactionStatus: IStatus) => void,
+  addOrder: (order: any) => void,
+  addEvent: (event: any) => void
 ) => {
-  exchange.on("Deposit", ({ event }) => {
+  exchange.on("Deposit", (token, user, amount, balance, event) => {
+    addEvent(event);
     setTransactionStatus({
       status: "SUCCESS",
-      event: event,
+      transactionType: "Transfer",
     });
   });
 
-  exchange.on("Withdraw", ({ event }) => {
+  exchange.on("Withdraw", (token, user, amount, balance, event) => {
+    addEvent(event);
     setTransactionStatus({
       status: "SUCCESS",
-      event: event,
+      transactionType: "Transfer",
     });
   });
+
+  exchange.on(
+    "Order",
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      timestamp,
+      event
+    ) => {
+      addOrder(event.args);
+      addEvent(event);
+      setTransactionStatus({
+        status: "SUCCESS",
+        transactionType: "New Order",
+      });
+    }
+  );
 };

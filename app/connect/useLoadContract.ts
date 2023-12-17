@@ -15,12 +15,16 @@ const useLoadContract = () => {
     loadTokens,
     loadSymbols,
     loadExchange,
+    addOrder,
+    addEvent,
     setTransactionStatus,
   ] = useContractStore((s) => [
     s.loadBalance,
     s.loadTokens,
     s.loadSymbols,
     s.loadExchange,
+    s.addOrder,
+    s.addEvent,
     s.setTransactionStatus,
   ]);
 
@@ -48,7 +52,7 @@ const useLoadContract = () => {
         const acctBalance = await provider.getBalance(account);
         loadBalance(formatEther(acctBalance.toString()));
       }
-      subscribeToEvents(exchange, setTransactionStatus);
+      subscribeToEvents(exchange, setTransactionStatus, addOrder, addEvent);
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }
