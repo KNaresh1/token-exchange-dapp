@@ -5,7 +5,12 @@ import { useEffect } from "react";
 import EXCHANGE_ABI from "../abis/Exchange.json";
 import config from "../config";
 import useContractStore from "../store";
-import { formatEther, loadExchangeTokens, subscribeToEvents } from "../utils";
+import {
+  formatEther,
+  loadExchangeTokens,
+  loadOrders,
+  subscribeToEvents,
+} from "../utils";
 
 const useLoadContract = () => {
   const { provider, account, chainId } = useWeb3React();
@@ -16,6 +21,10 @@ const useLoadContract = () => {
     loadSymbols,
     loadExchange,
     addOrder,
+    loadAllOrders,
+    loadOpenOrders,
+    loadFilledOrders,
+    loadCancelledOrders,
     addEvent,
     setTransactionStatus,
   ] = useContractStore((s) => [
@@ -24,6 +33,10 @@ const useLoadContract = () => {
     s.loadSymbols,
     s.loadExchange,
     s.addOrder,
+    s.loadAllOrders,
+    s.loadOpenOrders,
+    s.loadFilledOrders,
+    s.loadCancelledOrders,
     s.addEvent,
     s.setTransactionStatus,
   ]);
@@ -51,6 +64,14 @@ const useLoadContract = () => {
       if (provider && account) {
         const acctBalance = await provider.getBalance(account);
         loadBalance(formatEther(acctBalance.toString()));
+        loadOrders(
+          provider,
+          exchange,
+          loadAllOrders,
+          loadOpenOrders,
+          loadFilledOrders,
+          loadCancelledOrders
+        );
       }
       subscribeToEvents(exchange, setTransactionStatus, addOrder, addEvent);
     } catch (error) {

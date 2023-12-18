@@ -19,7 +19,7 @@ import useContractStore from "../store";
 import { makeOrder } from "../utils";
 
 const Order = () => {
-  const { provider } = useWeb3React();
+  const { provider, account } = useWeb3React();
 
   const [orderType, setOrderType] = useState<string>("Buy");
 
@@ -133,7 +133,7 @@ const Order = () => {
                   isLoading={isSubmitting}
                   loadingText={"Ordering"}
                   rightIcon={<FaChevronRight />}
-                  isDisabled={amount <= 0 || price <= 0}
+                  isDisabled={!account || amount <= 0 || price <= 0}
                   type="submit"
                 >
                   {orderType} Order

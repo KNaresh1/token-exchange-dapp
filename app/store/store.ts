@@ -37,10 +37,17 @@ const createTokenSlice: StateCreator<TokenSlice> = (set) => ({
 
 interface ExchangeSlice {
   exchange: Contract;
-  orders: any[];
+  allOrders: any[];
+  openOrders: any[];
+  filledOrders: any[];
+  cancelledOrders: any[];
   events: any[];
   transactionStatus: IStatus;
   addOrder: (order: any) => void;
+  loadAllOrders: (allOrders: any[]) => void;
+  loadOpenOrders: (openOrders: any[]) => void;
+  loadFilledOrders: (filledOrders: any[]) => void;
+  loadCancelledOrders: (cancelledOrders: any[]) => void;
   addEvent: (event: any) => void;
   loadExchange: (exchange: Contract) => void;
   setTransactionStatus: (transactionStatus: IStatus) => void;
@@ -48,13 +55,21 @@ interface ExchangeSlice {
 
 const createExchangeSlice: StateCreator<ExchangeSlice> = (set) => ({
   exchange: {} as Contract,
-  orders: [],
+  allOrders: [],
+  openOrders: [],
+  filledOrders: [],
+  cancelledOrders: [],
   events: [],
   transactionStatus: {
     status: "INITIAL",
     transactionType: "",
   },
-  addOrder: (order) => set((store) => ({ orders: [...store.orders, order] })),
+  addOrder: (order) =>
+    set((store) => ({ allOrders: [...store.allOrders, order] })),
+  loadAllOrders: (allOrders) => set(() => ({ allOrders })),
+  loadOpenOrders: (openOrders) => set(() => ({ openOrders })),
+  loadFilledOrders: (filledOrders) => set(() => ({ filledOrders })),
+  loadCancelledOrders: (cancelledOrders) => set(() => ({ cancelledOrders })),
   addEvent: (event) => set((store) => ({ events: [...store.events, event] })),
   loadExchange: (exchange) => set(() => ({ exchange })),
   setTransactionStatus: (transactionStatus) =>

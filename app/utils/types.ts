@@ -9,3 +9,11 @@ export interface OrderInfo {
   amount: number;
   price: number;
 }
+
+export interface OrderBookInfo {
+  orderId: string;
+  amountGet: string;
+  amountGive: string;
+  price: number;
+  timestamp: string;
+}

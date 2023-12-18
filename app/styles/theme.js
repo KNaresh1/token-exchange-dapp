@@ -11,7 +11,18 @@ const theme = extendTheme({
   colors: {
     primary: "#0D121D",
     secondary: "#121A29",
-    neutral: "#767F92",
+    green: "#25CE8F",
+    red: "#F45353",
+  },
+  components: {
+    Table: {
+      baseStyle: {
+        th: {
+          textTransform: "none",
+          fontWeight: "normal",
+        },
+      },
+    },
   },
 });
 

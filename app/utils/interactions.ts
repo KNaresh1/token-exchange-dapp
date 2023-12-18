@@ -36,6 +36,43 @@ export const loadUserBalances = async (
   loadExchangeBalances([balance1, balance2]);
 };
 
+export const loadOrders = async (
+  provider: any,
+  exchange: Contract,
+  loadAllOrders: (orders: any[]) => void,
+  loadOpenOrders: (openOrders: any[]) => void,
+  loadFilledOrders: (filledOrders: any[]) => void,
+  loadCancelledOrders: (cancelledOrders: any[]) => void
+) => {
+  const block = await provider.getBlockNumber();
+
+  const cancelledOrders = (
+    await exchange.queryFilter("CancelOrder", 0, block)
+  ).map((event) => event.args);
+  loadCancelledOrders(cancelledOrders);
+
+  const filledOrders = (await exchange.queryFilter("Trade", 0, block)).map(
+    (event) => event.args
+  );
+  loadFilledOrders(filledOrders);
+
+  const allOrders = (await exchange.queryFilter("Order", 0, block)).map(
+    (event) => event.args
+  );
+  loadAllOrders(allOrders);
+
+  const openOrders = allOrders
+    ?.filter(
+      (ao) =>
+        !filledOrders?.some((fo) => fo?.id.toString() === ao?.id.toString())
+    )
+    ?.filter(
+      (o) =>
+        !cancelledOrders?.some((co) => co?.id.toString() === o?.id.toString())
+    );
+  loadOpenOrders(openOrders);
+};
+
 export const transactTokens = async (
   provider: any,
   token: Contract,

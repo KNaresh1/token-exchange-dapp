@@ -34,7 +34,7 @@ const TransactToken = ({
   exchangeBalance,
   transactionType,
 }: TransactTokenProps) => {
-  const { provider } = useWeb3React();
+  const { provider, account } = useWeb3React();
 
   const [amount, setAmount] = useState<number>(0);
 
@@ -131,7 +131,7 @@ const TransactToken = ({
             isLoading={isSubmitting}
             loadingText={`${transactionType}ing`}
             rightIcon={<FaChevronRight />}
-            isDisabled={amount <= 0}
+            isDisabled={!account || amount <= 0}
             type="submit"
           >
             {transactionType}
