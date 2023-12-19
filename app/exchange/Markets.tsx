@@ -1,6 +1,7 @@
-import { Box, Select, Stack, Text } from "@chakra-ui/react";
+import { Select, Stack, Text } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import { useState } from "react";
+import { Banner } from "../components";
 import config from "../config";
 import useContractStore from "../store";
 import { loadExchangeTokens } from "../utils";
@@ -56,9 +57,7 @@ const Markets = () => {
           </option>
         </Select>
       ) : (
-        <Box height={8}>
-          <Text fontSize="sm">No Network</Text>
-        </Box>
+        <Banner text={"No Network"} />
       )}
     </Stack>
   );

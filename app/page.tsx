@@ -3,7 +3,7 @@
 import { Box, Divider, Flex, Stack } from "@chakra-ui/react";
 import { Header, NavBar } from "./components";
 import useLoadContract from "./connect";
-import { Balance, Markets, Order, OrderBook } from "./exchange";
+import { Balance, Markets, Order, OrderBook, PriceChart } from "./exchange";
 
 export default function Home() {
   useLoadContract();
@@ -25,6 +25,7 @@ export default function Home() {
       </Stack>
       <Box flex="1" bg="primary" p={5}>
         <NavBar />
+        <PriceChart />
         <OrderBook />
       </Box>
     </Flex>

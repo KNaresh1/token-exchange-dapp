@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import sortLogo from "../../public/sort.png";
+import { Banner } from "../components";
 import { OrderBookInfo } from "../utils";
 
 interface OrderTableProps {
@@ -29,7 +30,7 @@ const OrderTable = ({
 }: OrderTableProps) => {
   return (
     <Box>
-      {orderBookInfo && tokenGetSymbol && tokenGiveSymbol ? (
+      {orderBookInfo?.length !== 0 && tokenGetSymbol && tokenGiveSymbol ? (
         <TableContainer>
           <Text fontSize="sm" mb={2}>
             {orderType}ing
@@ -71,18 +72,30 @@ const OrderTable = ({
             </Thead>
             <Tbody>
               {orderBookInfo
-                .sort((a, b) => b.price - a.price)
+                ?.sort((a, b) => b.price - a.price)
                 .map((order, index) => {
                   return (
-                    <Tr key={index}>
-                      <Td>{order.amountGive}</Td>
+                    <Tr key={index} maxHeight="0px">
+                      <Td py={1} fontSize="12px" fontWeight="semibold">
+                        {order.amountGive}
+                      </Td>
                       <Td
+                        py={1}
+                        fontSize="12px"
+                        fontWeight="semibold"
                         textAlign="right"
                         color={orderType === "Buying" ? "green" : "red"}
                       >
                         {order.price}
                       </Td>
-                      <Td textAlign="right">{order.amountGet}</Td>
+                      <Td
+                        py={1}
+                        textAlign="right"
+                        fontWeight="semibold"
+                        fontSize="12px"
+                      >
+                        {order.amountGet}
+                      </Td>
                     </Tr>
                   );
                 })}
@@ -90,11 +103,7 @@ const OrderTable = ({
           </Table>
         </TableContainer>
       ) : (
-        <Flex justifyContent="center">
-          <Text fontSize="sm" fontWeight="semibold" p={5}>
-            No {orderType} Orders
-          </Text>
-        </Flex>
+        <Banner text={`No ${orderType} Orders`} />
       )}
     </Box>
   );

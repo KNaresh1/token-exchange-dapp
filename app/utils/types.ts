@@ -16,4 +16,5 @@ export interface OrderBookInfo {
   amountGive: string;
   price: number;
   timestamp: string;
+  formattedTimestamp: string;
 }

@@ -44,6 +44,7 @@ export const buildOrderInfo = (
     amountGive: formatUnitsToEther(amountGive),
     amountGet: formatUnitsToEther(amountGet),
     price: tokenPrice,
+    timestamp: timestamp,
     formattedTimestamp: moment
       .unix(Number(timestamp))
       .format("h:mm:ssa d MMM D"),

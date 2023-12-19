@@ -48,11 +48,11 @@ const OrderBook = () => {
   };
 
   return (
-    <Box py={2} px={5} bg="secondary" mt={5}>
+    <Box py={1} px={5} bg="secondary" mt={5}>
       <Text fontSize="sm" fontWeight="semibold">
         Order Book
       </Text>
-      <HStack mt={3} gap={20} align="flex-start">
+      <HStack mt={3} gap={20} align="flex-start" mb={5}>
         <Box width="50%">
           <OrderTable
             orderType={"Sell"}
@@ -64,8 +64,8 @@ const OrderBook = () => {
         <Box width="50%">
           <OrderTable
             orderType={"Buy"}
-            tokenGetSymbol={symbols[1]}
-            tokenGiveSymbol={symbols[0]}
+            tokenGetSymbol={symbols[0]}
+            tokenGiveSymbol={symbols[1]}
             orderBookInfo={buyOrders}
           />
         </Box>
