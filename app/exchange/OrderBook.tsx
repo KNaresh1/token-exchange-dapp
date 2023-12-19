@@ -17,7 +17,7 @@ const OrderBook = () => {
   useEffect(() => {
     fetchSellOrders();
     fetchBuyOrders();
-  }, [tokens, openOrders, symbols]);
+  }, [openOrders]);
 
   const fetchSellOrders = () => {
     const sell = openOrders
@@ -25,7 +25,9 @@ const OrderBook = () => {
       ?.map((order) =>
         buildOrderInfo(
           order.id,
+          order.tokenGive,
           order.amountGive,
+          order.tokenGet,
           order.amountGet,
           order.timestamp
         )
@@ -39,7 +41,9 @@ const OrderBook = () => {
       ?.map((order) =>
         buildOrderInfo(
           order.id,
+          order.tokenGet,
           order.amountGet,
+          order.tokenGive,
           order.amountGive,
           order.timestamp
         )

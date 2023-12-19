@@ -24,10 +24,10 @@ const PriceChart = () => {
   }, [filledOrders]);
 
   return (
-    <Box py={2} px={5} mt={6} bg="secondary" height="24em">
+    <Box py={2} px={5} mt={6} bg="secondary" height="24em" alignItems="center">
       {account && chartData && symbols.length > 0 ? (
         <Stack mt={2}>
-          <Flex direction="row">
+          <Flex direction="row" alignItems="center">
             <Text fontSize="sm" fontWeight="semibold">
               {`${symbols[0]} / ${symbols[1]}`}
             </Text>
@@ -44,7 +44,6 @@ const PriceChart = () => {
                 style={{ width: "60px", height: "30px" }}
               />
             )}
-
             <Text fontSize="sm" fontWeight="semibold">
               {chartData.lastPrice}
             </Text>

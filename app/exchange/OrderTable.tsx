@@ -29,7 +29,7 @@ const OrderTable = ({
   orderBookInfo,
 }: OrderTableProps) => {
   return (
-    <Box maxHeight="12em" overflowY="auto" bg="secondary">
+    <Box maxHeight="9em" overflowY="auto" bg="secondary">
       {orderBookInfo?.length !== 0 && tokenGetSymbol && tokenGiveSymbol ? (
         <TableContainer>
           <Text fontSize="sm" mb={1}>
@@ -38,7 +38,7 @@ const OrderTable = ({
           <Table size="sm" mt={2} ml={-4} variant="unstyled">
             <Thead color="gray">
               <Tr>
-                <Th>
+                <Th fontWeight="semibold">
                   <Flex>
                     {tokenGetSymbol}
                     <Image
@@ -48,7 +48,7 @@ const OrderTable = ({
                     />
                   </Flex>
                 </Th>
-                <Th>
+                <Th fontWeight="semibold">
                   <Flex justifyContent="flex-end">
                     {tokenGetSymbol}/{tokenGiveSymbol}
                     <Image
@@ -58,7 +58,7 @@ const OrderTable = ({
                     />
                   </Flex>
                 </Th>
-                <Th>
+                <Th fontWeight="semibold">
                   <Flex justifyContent="flex-end">
                     {tokenGiveSymbol}
                     <Image

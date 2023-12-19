@@ -5,11 +5,11 @@ import {
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { useWeb3React } from "@web3-react/core";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import sortLogo from "../../public/sort.png";
@@ -17,48 +17,45 @@ import { Banner } from "../components";
 import useContractStore from "../store";
 import { OrderBookInfo, buildOrderInfo } from "../utils";
 
-const Trades = () => {
-  const [symbols, filledOrders] = useContractStore((s) => [
+const UserFilledOrders = () => {
+  const { account } = useWeb3React();
+
+  const [userFilledOrders, setUserFilledOrders] = useState<
+    null | OrderBookInfo[]
+  >(null);
+
+  const [symbols, tokens, filledOrders] = useContractStore((s) => [
     s.symbols,
+    s.tokens,
     s.filledOrders,
   ]);
 
-  const [trades, setTrades] = useState<null | OrderBookInfo[]>(null);
-
   useEffect(() => {
-    fetchTrades();
+    fetchUserFilledOrders();
   }, [filledOrders]);
 
-  const fetchTrades = () => {
-    const _trades = filledOrders?.map((order) =>
-      buildOrderInfo(
-        order.id,
-        order.tokenGet,
-        order.amountGet,
-        order.tokenGive,
-        order.amountGive,
-        order.timestamp
-      )
-    );
-    setTrades(_trades);
+  const fetchUserFilledOrders = () => {
+    const _userFilledOrders = filledOrders
+      .filter((order) => order.user === account || order.creator === account)
+      .map((order) =>
+        buildOrderInfo(
+          order.id,
+          order.tokenGet,
+          order.amountGet,
+          order.tokenGive,
+          order.amountGive,
+          order.timestamp,
+          order.creator
+        )
+      );
+    setUserFilledOrders(_userFilledOrders);
   };
 
   return (
-    <Box
-      py={2}
-      px={5}
-      bg="secondary"
-      mt={5}
-      width="50%"
-      height="12em"
-      overflowY="auto"
-    >
-      <Text fontSize="sm" fontWeight="semibold">
-        Trades
-      </Text>
-      {trades && symbols.length > 0 ? (
+    <Box>
+      {symbols.length > 0 && userFilledOrders ? (
         <TableContainer>
-          <Table size="sm" mt={5} ml={-4} variant="unstyled">
+          <Table size="sm" ml={-4} variant="unstyled">
             <Thead color="gray">
               <Tr>
                 <Th fontWeight="semibold">
@@ -83,7 +80,7 @@ const Trades = () => {
                 </Th>
                 <Th fontWeight="semibold">
                   <Flex justifyContent="flex-end">
-                    {`${symbols[0]}/${symbols[1]}`}
+                    {symbols[0]}/{symbols[1]}
                     <Image
                       src={sortLogo}
                       alt="Sort Logo"
@@ -94,24 +91,24 @@ const Trades = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {trades
+              {userFilledOrders
                 ?.sort((a, b) => Number(b.timestamp) - Number(a.timestamp))
-                .map((trade, index) => {
-                  const next = trades[index + 1] || trades[index];
-                  const isPriceHigher = trade.price < next.price;
+                .map((order, index) => {
+                  const isBuy = order.creator === tokens[1].address;
                   return (
                     <Tr key={index} maxHeight="0px">
                       <Td py={1} fontSize="12px" fontWeight="semibold">
-                        {trade.formattedTimestamp}
+                        {order.formattedTimestamp}
                       </Td>
                       <Td
                         py={1}
                         fontSize="12px"
                         fontWeight="semibold"
                         textAlign="right"
-                        color={isPriceHigher ? "red" : "green"}
+                        color={isBuy ? "green" : "red"}
                       >
-                        {trade.amountGive}
+                        {isBuy ? "+" : "-"}
+                        {order.amountGive}
                       </Td>
                       <Td
                         py={1}
@@ -119,7 +116,7 @@ const Trades = () => {
                         fontWeight="semibold"
                         textAlign="right"
                       >
-                        {trade.price}
+                        {order.price}
                       </Td>
                     </Tr>
                   );
@@ -128,10 +125,10 @@ const Trades = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Banner text={"No Trades"} />
+        <Banner text={"No Filled Orders"} />
       )}
     </Box>
   );
 };
 
-export default Trades;
+export default UserFilledOrders;

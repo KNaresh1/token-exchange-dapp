@@ -12,9 +12,12 @@ export interface OrderInfo {
 
 export interface OrderBookInfo {
   orderId: number;
+  tokenGet: string;
   amountGet: string;
+  tokenGive: string;
   amountGive: string;
   price: number;
+  creator: null | string;
   timestamp: string;
   formattedTimestamp: string;
 }

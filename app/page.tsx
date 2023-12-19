@@ -6,11 +6,11 @@ import useLoadContract from "./connect";
 import {
   Balance,
   Markets,
-  MyOrders,
   Order,
   OrderBook,
   PriceChart,
   Trades,
+  Transactions,
 } from "./exchange";
 
 export default function Home() {
@@ -35,12 +35,8 @@ export default function Home() {
         <NavBar />
         <PriceChart />
         <HStack>
-          <Box width="50%">
-            <MyOrders />
-          </Box>
-          <Box width="50%">
-            <Trades />
-          </Box>
+          <Transactions />
+          <Trades />
         </HStack>
         <OrderBook />
       </Box>

@@ -29,9 +29,12 @@ export const shortenAccount = (account: string) => {
 
 export const buildOrderInfo = (
   id: number,
+  tokenGive: string,
   amountGive: number,
+  tokenGet: string,
   amountGet: number,
-  timestamp: string
+  timestamp: string,
+  creator = null
 ) => {
   // Calculate token price to 5 decimal places
   const precision = 100000;
@@ -41,9 +44,12 @@ export const buildOrderInfo = (
 
   return {
     orderId: id,
+    tokenGive,
     amountGive: formatUnitsToEther(amountGive),
+    tokenGet,
     amountGet: formatUnitsToEther(amountGet),
     price: tokenPrice,
+    creator,
     timestamp: timestamp,
     formattedTimestamp: moment
       .unix(Number(timestamp))

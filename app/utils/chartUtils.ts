@@ -86,7 +86,9 @@ export const buildSeries = (orders: any[]) => {
     .map((order) =>
       buildOrderInfo(
         order.id,
+        order.tokenGet,
         order.amountGet,
+        order.tokenGive,
         order.amountGive,
         order.timestamp
       )
