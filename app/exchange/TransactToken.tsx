@@ -73,7 +73,7 @@ const TransactToken = ({
         height="3.8em"
       >
         <Stack>
-          <Text fontSize="xs" color="neutral" mb={-1}>
+          <Text fontSize="xs" color="gray" mb={-1}>
             Token
           </Text>
           {symbol && (
@@ -91,13 +91,13 @@ const TransactToken = ({
           )}
         </Stack>
         <Stack>
-          <Text fontSize="xs" color="neutral" mb={-1}>
+          <Text fontSize="xs" color="gray" mb={-1}>
             Wallet
           </Text>
           <Text fontSize="sm">{tokenBalance}</Text>
         </Stack>
         <Stack>
-          <Text fontSize="xs" color="neutral" mb={-1}>
+          <Text fontSize="xs" color="gray" mb={-1}>
             Exchange
           </Text>
           <Text fontSize="sm">{exchangeBalance}</Text>

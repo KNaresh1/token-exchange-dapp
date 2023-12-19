@@ -11,36 +11,49 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import sortLogo from "../../public/sort.png";
 import { Banner } from "../components";
-import { OrderBookInfo } from "../utils";
+import useContractStore from "../store";
+import { OrderBookInfo, buildOrderInfo } from "../utils";
 
-interface OrderTableProps {
-  orderType: string;
-  tokenGetSymbol: string;
-  tokenGiveSymbol: string;
-  orderBookInfo: null | OrderBookInfo[];
-}
+const Trades = () => {
+  const [symbols, filledOrders] = useContractStore((s) => [
+    s.symbols,
+    s.filledOrders,
+  ]);
 
-const OrderTable = ({
-  orderType,
-  tokenGetSymbol,
-  tokenGiveSymbol,
-  orderBookInfo,
-}: OrderTableProps) => {
+  const [trades, setTrades] = useState<null | OrderBookInfo[]>(null);
+
+  useEffect(() => {
+    fetchTrades();
+  }, [filledOrders]);
+
+  const fetchTrades = () => {
+    const _trades = filledOrders?.map((order) =>
+      buildOrderInfo(
+        order.id,
+        order.amountGet,
+        order.amountGive,
+        order.timestamp
+      )
+    );
+    setTrades(_trades);
+  };
+
   return (
-    <Box maxHeight="12em" overflowY="auto" bg="secondary">
-      {orderBookInfo?.length !== 0 && tokenGetSymbol && tokenGiveSymbol ? (
+    <Box py={2} px={5} bg="secondary" mt={5} height="10em" overflowY="auto">
+      <Text fontSize="sm" fontWeight="semibold">
+        Trades
+      </Text>
+      {trades && symbols.length > 0 ? (
         <TableContainer>
-          <Text fontSize="sm" mb={1}>
-            {orderType}ing
-          </Text>
           <Table size="sm" mt={2} ml={-4} variant="unstyled">
             <Thead color="gray">
               <Tr>
                 <Th>
                   <Flex>
-                    {tokenGetSymbol}
+                    Time
                     <Image
                       src={sortLogo}
                       alt="Sort Logo"
@@ -50,7 +63,7 @@ const OrderTable = ({
                 </Th>
                 <Th>
                   <Flex justifyContent="flex-end">
-                    {tokenGetSymbol}/{tokenGiveSymbol}
+                    {symbols[0]}
                     <Image
                       src={sortLogo}
                       alt="Sort Logo"
@@ -60,7 +73,7 @@ const OrderTable = ({
                 </Th>
                 <Th>
                   <Flex justifyContent="flex-end">
-                    {tokenGiveSymbol}
+                    {`${symbols[0]} / ${symbols[1]}`}
                     <Image
                       src={sortLogo}
                       alt="Sort Logo"
@@ -71,30 +84,32 @@ const OrderTable = ({
               </Tr>
             </Thead>
             <Tbody>
-              {orderBookInfo
-                ?.sort((a, b) => b.price - a.price)
-                .map((order, index) => {
+              {trades
+                ?.sort((a, b) => Number(b.timestamp) - Number(a.timestamp))
+                .map((trade, index) => {
+                  const next = trades[index + 1] || trades[index];
+                  const isPriceHigher = trade.price < next.price;
                   return (
                     <Tr key={index} maxHeight="0px">
                       <Td py={1} fontSize="12px" fontWeight="semibold">
-                        {order.amountGive}
+                        {trade.formattedTimestamp}
                       </Td>
                       <Td
                         py={1}
                         fontSize="12px"
                         fontWeight="semibold"
                         textAlign="right"
-                        color={orderType === "Buying" ? "green" : "red"}
+                        color={isPriceHigher ? "red" : "green"}
                       >
-                        {order.price}
+                        {trade.amountGive}
                       </Td>
                       <Td
                         py={1}
-                        textAlign="right"
-                        fontWeight="semibold"
                         fontSize="12px"
+                        fontWeight="semibold"
+                        textAlign="right"
                       >
-                        {order.amountGet}
+                        {trade.price}
                       </Td>
                     </Tr>
                   );
@@ -103,10 +118,10 @@ const OrderTable = ({
           </Table>
         </TableContainer>
       ) : (
-        <Banner text={`No ${orderType} Orders`} />
+        <Banner text={"No Transactions"} />
       )}
     </Box>
   );
 };
 
-export default OrderTable;
+export default Trades;

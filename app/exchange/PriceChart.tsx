@@ -24,9 +24,9 @@ const PriceChart = () => {
   }, [filledOrders]);
 
   return (
-    <Box py={2} px={5} mt={8} bg="secondary" height="22em">
+    <Box py={2} px={5} mt={6} bg="secondary" height="24em">
       {account && chartData && symbols.length > 0 ? (
-        <Stack>
+        <Stack mt={2}>
           <Flex direction="row">
             <Text fontSize="sm" fontWeight="semibold">
               {`${symbols[0]} / ${symbols[1]}`}
@@ -35,13 +35,13 @@ const PriceChart = () => {
               <Image
                 src={upArrowLogo}
                 alt="Up Arrow Logo"
-                style={{ width: "55px", height: "22px" }}
+                style={{ width: "60px", height: "30px" }}
               />
             ) : (
               <Image
                 src={downArrowLogo}
                 alt="Down Arrow Logo"
-                style={{ width: "50px", height: "20px" }}
+                style={{ width: "60px", height: "30px" }}
               />
             )}
 
@@ -53,7 +53,7 @@ const PriceChart = () => {
             type="candlestick"
             options={options}
             series={chartData.series}
-            height="300"
+            height="320"
           />
         </Stack>
       ) : (

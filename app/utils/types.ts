@@ -11,7 +11,7 @@ export interface OrderInfo {
 }
 
 export interface OrderBookInfo {
-  orderId: string;
+  orderId: number;
   amountGet: string;
   amountGive: string;
   price: number;
