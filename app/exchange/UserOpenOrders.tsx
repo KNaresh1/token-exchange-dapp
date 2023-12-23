@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Table,
   TableContainer,
@@ -15,20 +16,23 @@ import { useEffect, useState } from "react";
 import sortLogo from "../../public/sort.png";
 import { Banner } from "../components";
 import useContractStore from "../store";
-import { OrderBookInfo, buildOrderInfo } from "../utils";
+import { OrderBookInfo, buildOrderInfo, cancelOrder } from "../utils";
 
 const UserOpenOrders = () => {
-  const { account } = useWeb3React();
+  const { provider, account } = useWeb3React();
 
   const [userOpenOrders, setUserOpenOrders] = useState<null | OrderBookInfo[]>(
     null
   );
 
-  const [symbols, tokens, openOrders] = useContractStore((s) => [
-    s.symbols,
-    s.tokens,
-    s.openOrders,
-  ]);
+  const [symbols, tokens, exchange, openOrders, setTransactionStatus] =
+    useContractStore((s) => [
+      s.symbols,
+      s.tokens,
+      s.exchange,
+      s.openOrders,
+      s.setTransactionStatus,
+    ]);
 
   useEffect(() => {
     fetchUserOpenOrders();
@@ -48,6 +52,10 @@ const UserOpenOrders = () => {
         )
       );
     setUserOpenOrders(_userOpenOrders);
+  };
+
+  const cancelOrderHandler = async (order: OrderBookInfo) => {
+    await cancelOrder(provider, exchange, order, setTransactionStatus);
   };
 
   return (
@@ -111,7 +119,19 @@ const UserOpenOrders = () => {
                         fontSize="12px"
                         fontWeight="semibold"
                         textAlign="right"
-                      ></Td>
+                      >
+                        <Button
+                          size="xs"
+                          height={5}
+                          px={2}
+                          variant="outline"
+                          colorScheme="blue"
+                          rounded={4}
+                          onClick={() => cancelOrderHandler(order)}
+                        >
+                          Cancel
+                        </Button>
+                      </Td>
                     </Tr>
                   );
                 })}

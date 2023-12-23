@@ -20,8 +20,8 @@ const useLoadContract = () => {
     loadTokens,
     loadSymbols,
     loadExchange,
-    addOrder,
-    loadAllOrders,
+    addFilledOrder,
+    addCancelledOrder,
     loadOpenOrders,
     loadFilledOrders,
     loadCancelledOrders,
@@ -32,8 +32,8 @@ const useLoadContract = () => {
     s.loadTokens,
     s.loadSymbols,
     s.loadExchange,
-    s.addOrder,
-    s.loadAllOrders,
+    s.addFilledOrder,
+    s.addCancelledOrder,
     s.loadOpenOrders,
     s.loadFilledOrders,
     s.loadCancelledOrders,
@@ -67,13 +67,18 @@ const useLoadContract = () => {
         loadOrders(
           provider,
           exchange,
-          loadAllOrders,
           loadOpenOrders,
           loadFilledOrders,
           loadCancelledOrders
         );
       }
-      subscribeToEvents(exchange, setTransactionStatus, addOrder, addEvent);
+      subscribeToEvents(
+        exchange,
+        setTransactionStatus,
+        addFilledOrder,
+        addCancelledOrder,
+        addEvent
+      );
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }

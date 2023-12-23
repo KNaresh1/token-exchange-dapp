@@ -10,10 +10,12 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { useWeb3React } from "@web3-react/core";
 import Image from "next/image";
 import sortLogo from "../../public/sort.png";
 import { Banner } from "../components";
-import { OrderBookInfo } from "../utils";
+import useContractStore from "../store";
+import { OrderBookInfo, fillOrder } from "../utils";
 
 interface OrderTableProps {
   orderType: string;
@@ -28,6 +30,17 @@ const OrderTable = ({
   tokenGiveSymbol,
   orderBookInfo,
 }: OrderTableProps) => {
+  const { provider } = useWeb3React();
+
+  const [exchange, setTransactionStatus] = useContractStore((s) => [
+    s.exchange,
+    s.setTransactionStatus,
+  ]);
+
+  const fillUserOrder = async (order: OrderBookInfo) => {
+    await fillOrder(provider, exchange, order, setTransactionStatus);
+  };
+
   return (
     <Box maxHeight="9em" overflowY="auto" bg="secondary">
       {orderBookInfo?.length !== 0 && tokenGetSymbol && tokenGiveSymbol ? (
@@ -75,7 +88,12 @@ const OrderTable = ({
                 ?.sort((a, b) => b.price - a.price)
                 .map((order, index) => {
                   return (
-                    <Tr key={index} maxHeight="0px">
+                    <Tr
+                      key={index}
+                      maxHeight="0px"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => fillUserOrder(order)}
+                    >
                       <Td py={1} fontSize="12px" fontWeight="semibold">
                         {order.amountGive}
                       </Td>

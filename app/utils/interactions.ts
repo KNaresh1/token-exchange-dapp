@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 import TOKEN_ABI from "../abis/Token.json";
-import { IStatus, OrderInfo } from "./types";
+import { IStatus, OrderBookInfo, OrderInfo } from "./types";
 import { formatUnits, parseUnits } from "./utils";
 
 export const loadExchangeTokens = async (
@@ -39,7 +39,6 @@ export const loadUserBalances = async (
 export const loadOrders = async (
   provider: any,
   exchange: Contract,
-  loadAllOrders: (orders: any[]) => void,
   loadOpenOrders: (openOrders: any[]) => void,
   loadFilledOrders: (filledOrders: any[]) => void,
   loadCancelledOrders: (cancelledOrders: any[]) => void
@@ -59,7 +58,6 @@ export const loadOrders = async (
   const allOrders = (await exchange.queryFilter("Order", 0, block)).map(
     (event) => event.args
   );
-  loadAllOrders(allOrders);
 
   const openOrders = allOrders
     ?.filter(
@@ -156,12 +154,109 @@ export const makeOrder = async (
   }
 };
 
+export const cancelOrder = async (
+  provider: any,
+  exchange: Contract,
+  order: OrderBookInfo,
+  setTransactionStatus: (transactionStatus: IStatus) => void
+) => {
+  let transaction;
+
+  setTransactionStatus({
+    status: "INPROGRESS",
+    transactionType: "Cancel",
+  });
+  try {
+    const signer = await provider.getSigner();
+
+    transaction = await exchange.connect(signer).cancelOrder(order.orderId);
+    await transaction.wait();
+  } catch (error) {
+    setTransactionStatus({
+      status: "ERROR",
+      transactionType: "Cancel",
+    });
+    console.log("Error while cancelling the order. ", error);
+  }
+};
+
+export const fillOrder = async (
+  provider: any,
+  exchange: Contract,
+  order: OrderBookInfo,
+  setTransactionStatus: (transactionStatus: IStatus) => void
+) => {
+  let transaction;
+
+  setTransactionStatus({
+    status: "INPROGRESS",
+    transactionType: "Fill Order",
+  });
+  try {
+    const signer = await provider.getSigner();
+
+    transaction = await exchange.connect(signer).fillOrder(order.orderId);
+    await transaction.wait();
+  } catch (error) {
+    setTransactionStatus({
+      status: "ERROR",
+      transactionType: "Fill Order",
+    });
+    console.log("Error while filling the order. ", error);
+  }
+};
+
 export const subscribeToEvents = (
   exchange: Contract,
   setTransactionStatus: (transactionStatus: IStatus) => void,
-  addOrder: (order: any) => void,
+  addFilledOrder: (order: any) => void,
+  addCancelledOrder: (order: any) => void,
   addEvent: (event: any) => void
 ) => {
+  exchange.on(
+    "CancelOrder",
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      timestamp,
+      event
+    ) => {
+      console.log("cancel order..", event.args.id.toString());
+      addCancelledOrder(event.args);
+      addEvent(event);
+      setTransactionStatus({
+        status: "SUCCESS",
+        transactionType: "Cancel",
+      });
+    }
+  );
+
+  exchange.on(
+    "Trade",
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      creator,
+      timestamp,
+      event
+    ) => {
+      addFilledOrder(event.args);
+      addEvent(event);
+      setTransactionStatus({
+        status: "SUCCESS",
+        transactionType: "Fill Order",
+      });
+    }
+  );
+
   exchange.on("Deposit", (token, user, amount, balance, event) => {
     addEvent(event);
     setTransactionStatus({
@@ -190,7 +285,6 @@ export const subscribeToEvents = (
       timestamp,
       event
     ) => {
-      addOrder(event.args);
       addEvent(event);
       setTransactionStatus({
         status: "SUCCESS",
