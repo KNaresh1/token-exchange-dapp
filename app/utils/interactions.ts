@@ -71,6 +71,19 @@ export const loadOrders = async (
   loadOpenOrders(openOrders);
 };
 
+export const filterBySelectedTokens = (orders: any[], tokens: Contract[]) => {
+  // Filter orders by selected tokens
+  return orders
+    ?.filter(
+      (o) =>
+        o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address
+    )
+    ?.filter(
+      (o) =>
+        o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address
+    );
+};
+
 export const transactTokens = async (
   provider: any,
   token: Contract,
@@ -208,13 +221,15 @@ export const fillOrder = async (
 
 export const subscribeToEvents = (
   exchange: Contract,
-  setTransactionStatus: (transactionStatus: IStatus) => void,
+  addOpenOrder: (order: any) => void,
   addFilledOrder: (order: any) => void,
   addCancelledOrder: (order: any) => void,
-  addEvent: (event: any) => void
+  addEvent: (event: any) => void,
+  transactionStatus: IStatus,
+  setTransactionStatus: (transactionStatus: IStatus) => void
 ) => {
   exchange.on(
-    "CancelOrder",
+    "Order",
     (
       id,
       user,
@@ -225,12 +240,11 @@ export const subscribeToEvents = (
       timestamp,
       event
     ) => {
-      console.log("cancel order..", event.args.id.toString());
-      addCancelledOrder(event.args);
+      addOpenOrder(event.args);
       addEvent(event);
       setTransactionStatus({
         status: "SUCCESS",
-        transactionType: "Cancel",
+        transactionType: "New Order",
       });
     }
   );
@@ -257,6 +271,28 @@ export const subscribeToEvents = (
     }
   );
 
+  exchange.on(
+    "CancelOrder",
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      timestamp,
+      event
+    ) => {
+      console.log("cancelled order id...", event.args.id.toString());
+      addCancelledOrder(event.args);
+      addEvent(event);
+      setTransactionStatus({
+        status: "SUCCESS",
+        transactionType: "Cancel",
+      });
+    }
+  );
+
   exchange.on("Deposit", (token, user, amount, balance, event) => {
     addEvent(event);
     setTransactionStatus({
@@ -272,24 +308,4 @@ export const subscribeToEvents = (
       transactionType: "Transfer",
     });
   });
-
-  exchange.on(
-    "Order",
-    (
-      id,
-      user,
-      tokenGet,
-      amountGet,
-      tokenGive,
-      amountGive,
-      timestamp,
-      event
-    ) => {
-      addEvent(event);
-      setTransactionStatus({
-        status: "SUCCESS",
-        transactionType: "New Order",
-      });
-    }
-  );
 };

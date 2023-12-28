@@ -1,12 +1,12 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 
 const Banner = ({ text }: { text: string }) => {
   return (
-    <Flex align="center" justify="center">
+    <Box>
       <Text fontSize="sm" fontWeight="semibold">
         {text}
       </Text>
-    </Flex>
+    </Box>
   );
 };
 

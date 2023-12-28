@@ -42,6 +42,7 @@ interface ExchangeSlice {
   cancelledOrders: any[];
   events: any[];
   transactionStatus: IStatus;
+  addOpenOrder: (order: any) => void;
   addFilledOrder: (order: any) => void;
   addCancelledOrder: (order: any) => void;
   loadOpenOrders: (openOrders: any[]) => void;
@@ -62,6 +63,10 @@ const createExchangeSlice: StateCreator<ExchangeSlice> = (set) => ({
     status: "INITIAL",
     transactionType: "",
   },
+  addOpenOrder: (order) =>
+    set((store) => ({
+      openOrders: [...store.openOrders, order],
+    })),
   addFilledOrder: (order) =>
     set((store) => ({
       filledOrders: [...store.filledOrders, order],
@@ -79,7 +84,7 @@ const createExchangeSlice: StateCreator<ExchangeSlice> = (set) => ({
   loadOpenOrders: (openOrders) => set(() => ({ openOrders })),
   loadFilledOrders: (filledOrders) => set(() => ({ filledOrders })),
   loadCancelledOrders: (cancelledOrders) => set(() => ({ cancelledOrders })),
-  addEvent: (event) => set((store) => ({ events: [...store.events, event] })),
+  addEvent: (event) => set((store) => ({ events: [event, ...store.events] })),
   loadExchange: (exchange) => set(() => ({ exchange })),
   setTransactionStatus: (transactionStatus) =>
     set(() => ({ transactionStatus })),

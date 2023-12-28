@@ -5,7 +5,7 @@ import logo from "../../public/logo.png";
 const Header = () => {
   return (
     <Flex align="center" gap="2">
-      <Image src={logo} alt="Logo" style={{ width: "30px", height: "30px" }} />
+      <Image src={logo} alt="Logo" style={{ width: "28px", height: "28px" }} />
       <Text fontSize="md" fontWeight="semibold">
         DApp Token Exchange
       </Text>

@@ -7,12 +7,13 @@ import downArrowLogo from "../../public/down-arrow.png";
 import upArrowLogo from "../../public/up-arrow.png";
 import { Banner } from "../components";
 import useContractStore from "../store";
-import { buildSeries, options } from "../utils";
+import { buildSeries, filterBySelectedTokens, options } from "../utils";
 
 const PriceChart = () => {
   const { account } = useWeb3React();
 
-  const [symbols, filledOrders] = useContractStore((s) => [
+  const [tokens, symbols, filledOrders] = useContractStore((s) => [
+    s.tokens,
     s.symbols,
     s.filledOrders,
   ]);
@@ -20,13 +21,22 @@ const PriceChart = () => {
   const [chartData, setChartData] = useState<null | any>(null);
 
   useEffect(() => {
-    setChartData(buildSeries(filledOrders));
-  }, [filledOrders]);
+    setChartData(buildSeries(filterBySelectedTokens(filledOrders, tokens)));
+  }, [filledOrders, tokens]);
 
   return (
-    <Box py={2} px={5} mt={6} bg="secondary" height="24em" alignItems="center">
+    <Box
+      py={2}
+      px={5}
+      mt={6}
+      bg="secondary"
+      height="24em"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       {account && chartData && symbols.length > 0 ? (
-        <Stack mt={2}>
+        <Stack mt={2} width="100%">
           <Flex direction="row" alignItems="center">
             <Text fontSize="sm" fontWeight="semibold">
               {`${symbols[0]} / ${symbols[1]}`}

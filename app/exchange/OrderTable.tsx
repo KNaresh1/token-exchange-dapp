@@ -42,84 +42,93 @@ const OrderTable = ({
   };
 
   return (
-    <Box maxHeight="9em" overflowY="auto" bg="secondary">
+    <Box
+      height="9.6em"
+      overflowY="auto"
+      bg="secondary"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       {orderBookInfo?.length !== 0 && tokenGetSymbol && tokenGiveSymbol ? (
-        <TableContainer>
-          <Text fontSize="sm" mb={1}>
-            {orderType}ing
-          </Text>
-          <Table size="sm" mt={2} ml={-4} variant="unstyled">
-            <Thead color="gray">
-              <Tr>
-                <Th fontWeight="semibold">
-                  <Flex>
-                    {tokenGetSymbol}
-                    <Image
-                      src={sortLogo}
-                      alt="Sort Logo"
-                      style={{ width: "16px", height: "16px" }}
-                    />
-                  </Flex>
-                </Th>
-                <Th fontWeight="semibold">
-                  <Flex justifyContent="flex-end">
-                    {tokenGetSymbol}/{tokenGiveSymbol}
-                    <Image
-                      src={sortLogo}
-                      alt="Sort Logo"
-                      style={{ width: "16px", height: "16px" }}
-                    />
-                  </Flex>
-                </Th>
-                <Th fontWeight="semibold">
-                  <Flex justifyContent="flex-end">
-                    {tokenGiveSymbol}
-                    <Image
-                      src={sortLogo}
-                      alt="Sort Logo"
-                      style={{ width: "16px", height: "16px" }}
-                    />
-                  </Flex>
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {orderBookInfo
-                ?.sort((a, b) => b.price - a.price)
-                .map((order, index) => {
-                  return (
-                    <Tr
-                      key={index}
-                      maxHeight="0px"
-                      _hover={{ cursor: "pointer" }}
-                      onClick={() => fillUserOrder(order)}
-                    >
-                      <Td py={1} fontSize="12px" fontWeight="semibold">
-                        {order.amountGive}
-                      </Td>
-                      <Td
-                        py={1}
-                        fontSize="12px"
-                        fontWeight="semibold"
-                        textAlign="right"
-                        color={orderType === "Buying" ? "green" : "red"}
+        <Box width="100%" height="100%">
+          <TableContainer>
+            <Text fontSize="sm" mb={1}>
+              {orderType}ing
+            </Text>
+            <Table size="sm" mt={2} ml={-4} variant="unstyled">
+              <Thead color="gray">
+                <Tr>
+                  <Th fontWeight="semibold">
+                    <Flex>
+                      {tokenGetSymbol}
+                      <Image
+                        src={sortLogo}
+                        alt="Sort Logo"
+                        style={{ width: "16px", height: "16px" }}
+                      />
+                    </Flex>
+                  </Th>
+                  <Th fontWeight="semibold">
+                    <Flex justifyContent="flex-end">
+                      {tokenGetSymbol}/{tokenGiveSymbol}
+                      <Image
+                        src={sortLogo}
+                        alt="Sort Logo"
+                        style={{ width: "16px", height: "16px" }}
+                      />
+                    </Flex>
+                  </Th>
+                  <Th fontWeight="semibold">
+                    <Flex justifyContent="flex-end">
+                      {tokenGiveSymbol}
+                      <Image
+                        src={sortLogo}
+                        alt="Sort Logo"
+                        style={{ width: "16px", height: "16px" }}
+                      />
+                    </Flex>
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {orderBookInfo
+                  ?.sort((a, b) => b.price - a.price)
+                  .map((order, index) => {
+                    return (
+                      <Tr
+                        key={index}
+                        maxHeight="0px"
+                        _hover={{ cursor: "pointer" }}
+                        onClick={() => fillUserOrder(order)}
                       >
-                        {order.price}
-                      </Td>
-                      <Td
-                        py={1}
-                        textAlign="right"
-                        fontWeight="semibold"
-                        fontSize="12px"
-                      >
-                        {order.amountGet}
-                      </Td>
-                    </Tr>
-                  );
-                })}
-            </Tbody>
-          </Table>
-        </TableContainer>
+                        <Td py={1} fontSize="12px" fontWeight="semibold">
+                          {order.amountGive}
+                        </Td>
+                        <Td
+                          py={1}
+                          fontSize="12px"
+                          fontWeight="semibold"
+                          textAlign="right"
+                          color={orderType === "Buying" ? "green" : "red"}
+                        >
+                          {order.price}
+                        </Td>
+                        <Td
+                          py={1}
+                          textAlign="right"
+                          fontWeight="semibold"
+                          fontSize="12px"
+                        >
+                          {order.amountGet}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
       ) : (
         <Banner text={`No ${orderType} Orders`} />
       )}

@@ -16,15 +16,7 @@ const Transactions = () => {
   const [activeTab, setActiveTab] = useState<string>("Orders");
 
   return (
-    <Box
-      py={2}
-      px={5}
-      bg="secondary"
-      mt={5}
-      width="50%"
-      height="12em"
-      overflowY="auto"
-    >
+    <Box py={2} px={5} bg="secondary" mt={5} width="50%" overflowY="auto">
       <HStack>
         <Text fontSize="sm" fontWeight="semibold">
           {activeTab === "Orders" ? "My Orders" : "My Transactions"}
@@ -51,7 +43,7 @@ const Transactions = () => {
       </HStack>
       <Tabs>
         <TabPanels>
-          <TabPanel pl={0} pr={0}>
+          <TabPanel pl={0} pr={0} pt={0}>
             {activeTab === "Orders" && <UserOpenOrders />}
             {activeTab === "Trades" && <UserFilledOrders />}
           </TabPanel>

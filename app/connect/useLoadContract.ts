@@ -20,24 +20,28 @@ const useLoadContract = () => {
     loadTokens,
     loadSymbols,
     loadExchange,
+    addOpenOrder,
     addFilledOrder,
     addCancelledOrder,
     loadOpenOrders,
     loadFilledOrders,
     loadCancelledOrders,
     addEvent,
+    transactionStatus,
     setTransactionStatus,
   ] = useContractStore((s) => [
     s.loadBalance,
     s.loadTokens,
     s.loadSymbols,
     s.loadExchange,
+    s.addOpenOrder,
     s.addFilledOrder,
     s.addCancelledOrder,
     s.loadOpenOrders,
     s.loadFilledOrders,
     s.loadCancelledOrders,
     s.addEvent,
+    s.transactionStatus,
     s.setTransactionStatus,
   ]);
 
@@ -61,7 +65,7 @@ const useLoadContract = () => {
       loadExchange(exchange);
 
       // Account Balance
-      if (provider && account) {
+      if (provider && account && exchange) {
         const acctBalance = await provider.getBalance(account);
         loadBalance(formatEther(acctBalance.toString()));
         loadOrders(
@@ -71,14 +75,17 @@ const useLoadContract = () => {
           loadFilledOrders,
           loadCancelledOrders
         );
+
+        subscribeToEvents(
+          exchange,
+          addOpenOrder,
+          addFilledOrder,
+          addCancelledOrder,
+          addEvent,
+          transactionStatus,
+          setTransactionStatus
+        );
       }
-      subscribeToEvents(
-        exchange,
-        setTransactionStatus,
-        addFilledOrder,
-        addCancelledOrder,
-        addEvent
-      );
     } catch (error) {
       console.error("Error while loading contract. ", error);
     }

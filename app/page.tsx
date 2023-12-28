@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Divider, Flex, HStack, Stack } from "@chakra-ui/react";
-import { Header, NavBar } from "./components";
+import { Header, NavBar, ShowAlert } from "./components";
 import useLoadContract from "./connect";
 import {
   Balance,
@@ -39,6 +39,8 @@ export default function Home() {
           <Trades />
         </HStack>
         <OrderBook />
+
+        <ShowAlert />
       </Box>
     </Flex>
   );

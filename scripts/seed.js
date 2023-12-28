@@ -36,7 +36,7 @@ async function main() {
     "Exchange",
     currentChainConfig.exchangeAddress
   );
-  console.log(`Exchange Token fetched: ${exchange.address}\n`);
+  console.log(`Exchange fetched: ${exchange.address}\n`);
 
   const [sender, receiver] = await ethers.getSigners();
   let transaction, result;

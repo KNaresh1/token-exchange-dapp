@@ -159,7 +159,7 @@ contract Exchange {
         orderCancelled[_id] = true;
 
         emit CancelOrder(
-            orderCount,
+            _order.id,
             msg.sender,
             _order.tokenGet,
             _order.amountGet,

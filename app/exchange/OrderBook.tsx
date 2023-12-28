@@ -1,7 +1,7 @@
 import { Box, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useContractStore from "../store";
-import { buildOrderInfo } from "../utils";
+import { buildOrderInfo, filterBySelectedTokens } from "../utils";
 import OrderTable from "./OrderTable";
 
 const OrderBook = () => {
@@ -15,12 +15,13 @@ const OrderBook = () => {
   const [sellOrders, setSellOrders] = useState<null | any[]>(null);
 
   useEffect(() => {
-    fetchSellOrders();
-    fetchBuyOrders();
-  }, [openOrders]);
+    const _openOrders = filterBySelectedTokens(openOrders, tokens);
+    fetchSellOrders(_openOrders);
+    fetchBuyOrders(_openOrders);
+  }, [openOrders, tokens]);
 
-  const fetchSellOrders = () => {
-    const sell = openOrders
+  const fetchSellOrders = (orders: any[]) => {
+    const sell = orders
       ?.filter((order) => order.tokenGive === tokens[1].address)
       ?.map((order) =>
         buildOrderInfo(
@@ -35,8 +36,8 @@ const OrderBook = () => {
     setSellOrders(sell);
   };
 
-  const fetchBuyOrders = () => {
-    const buy = openOrders
+  const fetchBuyOrders = (orders: any[]) => {
+    const buy = orders
       ?.filter((order) => order.tokenGive === tokens[0].address)
       ?.map((order) =>
         buildOrderInfo(
