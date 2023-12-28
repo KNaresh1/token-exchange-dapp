@@ -8,10 +8,10 @@
             "explorerURL": "#"
         },
         "11155111": {
-            "exchangeAddress": "",
-            "dappAddress": "",
-            "mETHAddress": "",
-            "mDAIAddress": "",
+            "exchangeAddress": "0x7e478fc7ACAa420D3b55129362B0De4706d94Bef",
+            "dappAddress": "0xE00A982F9a60E6E9D5834AE9529d3C32Ab4568B0",
+            "mETHAddress": "0x174ead642398E42761602b9E7aC82Cd232f6FE76",
+            "mDAIAddress": "0x40fe2CF8988536F52fe6044516A18C3855891a0B",
             "explorerURL": "https://sepolia.etherscan.io/"
         }
     }

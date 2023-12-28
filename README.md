@@ -3,7 +3,7 @@ A Decentralized crypto currency exchange, that runs on the blockchain powered by
 
 ### App walkthrough
 1. To start with, user can connect to their metamask wallet using the Connect button
-2. User can change networks for their trading - (Localhost, Kovan are currently supported). It can support any other evm compatible chains
+2. User can change networks for their trading - (Localhost, Sepolia are currently supported). It can support any other evm compatible chains
 3. Can trade tokens by selecting different trading pairs. Currently supported tokens are listed in the dropdown
 4. The app basically allows users to deposit and withdraws his funds from/to crypto currency exchange
 5. User can buy and sell crypto and he can see all his orders in his list as well as fill the orders
@@ -17,7 +17,7 @@ DApp/mDAI - mock version of dai
 
 ### Supported Networks:
 - Localhost - local blockchain run with hardhat
-- Kovan - Testnet
+- Sepolia - Testnet
 
 ### End-to-End technology stack
 1. FrontEnd: 
@@ -31,6 +31,11 @@ DApp/mDAI - mock version of dai
    3. Ethers   - To interact with Etherum smart contracts
 
 
+### Testnet
+- Node service provider: INFURA
+- Website is deployed to IPFS using fleek 
+
+
 ### Steps to run the app
 1. $ npm i - To install all the dependencies
 2. $ npx hardhat compile - To compile smart contracts
@@ -39,3 +44,4 @@ DApp/mDAI - mock version of dai
 5. $ npx hardhat run scripts/seed.js --network localhost - Script that adds initial data rather than doing it manually in order to quickly start using the app 
 6. Copy the Exchange and Token abis from compiled smart contracts into fronend app/abi corresponding files
 7. $ npm run dev - start the app
+8. $ npx hardhat run scripts/deploy.js --network sepolia - Deploy to sepolia testnet

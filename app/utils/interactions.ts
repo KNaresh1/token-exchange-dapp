@@ -283,7 +283,6 @@ export const subscribeToEvents = (
       timestamp,
       event
     ) => {
-      console.log("cancelled order id...", event.args.id.toString());
       addCancelledOrder(event.args);
       addEvent(event);
       setTransactionStatus({

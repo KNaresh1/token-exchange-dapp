@@ -27,7 +27,7 @@ const ShowAlert = () => {
   }, [transactionStatus]);
 
   const addToast = () => {
-    const { status, transactionType } = transactionStatus;
+    const { status } = transactionStatus;
     const message =
       status === "SUCCESS"
         ? "Transaction Successful"
