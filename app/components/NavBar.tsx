@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, Flex, Link, Select, Spacer, Text } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import Image from "next/image";

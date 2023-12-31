@@ -2,12 +2,17 @@ import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
 import downArrowLogo from "../../public/down-arrow.png";
 import upArrowLogo from "../../public/up-arrow.png";
 import { Banner } from "../components";
 import useContractStore from "../store";
 import { buildSeries, filterBySelectedTokens, options } from "../utils";
+
+import dynamic from "next/dynamic";
+
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 const PriceChart = () => {
   const { account } = useWeb3React();
@@ -62,6 +67,7 @@ const PriceChart = () => {
             type="candlestick"
             options={options}
             series={chartData.series}
+            width="100%"
             height="320"
           />
         </Stack>

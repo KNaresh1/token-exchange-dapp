@@ -1,5 +1,3 @@
-"use client";
-
 import { Box, Text, createStandaloneToast } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import Link from "next/link";
