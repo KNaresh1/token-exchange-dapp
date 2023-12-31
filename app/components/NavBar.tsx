@@ -1,36 +1,46 @@
 "use client";
 
 import { Button, Flex, Link, Select, Spacer, Text } from "@chakra-ui/react";
+import { useWeb3React } from "@web3-react/core";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import ethLogo from "../../public/eth.png";
 import config from "../config";
-import { useConnectWallet } from "../connect";
-import useContractStore from "../store";
+import useContractStore, { resetStore } from "../store";
 import { shortenAccount } from "../utils";
 
-const supportedNetworks = [
-  { value: 31337, label: "Localhost" },
-  { value: 11155111, label: "Sepolia" },
-];
-
 const NavBar = () => {
+  const { connector, chainId, account, isActive, isActivating } =
+    useWeb3React();
+
   const [balance] = useContractStore((s) => [s.balance]);
 
-  const [selectedChainId, setSelectedChainId] = useState<number>(31337);
+  const [selectedChainId, setSelectedChainId] = useState<null | string>(null);
+  const [selectedAccount, setSelectedAccount] = useState<undefined | string>();
 
-  const {
-    account,
-    active: isActive,
-    loading: isConnecting,
-    connectWallet,
-    deactivate,
-  } = useConnectWallet(selectedChainId);
+  useEffect(() => {
+    setSelectedAccount(account);
+    if (selectedChainId) {
+      connect(selectedChainId);
+    }
+  }, [chainId, account, selectedChainId]);
 
-  const handleChainChange = (newChainId: number) => {
-    setSelectedChainId(newChainId);
-    deactivate();
+  const connect = async (chainId?: string) => {
+    const chainToConnect = Number(chainId || selectedChainId);
+    try {
+      await connector.activate({ chainId: chainToConnect });
+    } catch (error) {
+      console.error(`Error while connecting to wallet. ${error}`);
+    }
+  };
+
+  const handleChainChange = async (selected: string) => {
+    setSelectedChainId(selected);
+    if (isActive) {
+      setSelectedAccount(undefined);
+      resetStore();
+    }
   };
 
   return (
@@ -44,20 +54,20 @@ const NavBar = () => {
         <Select
           p={0}
           border={0}
-          width={120}
+          width={152}
           size="sm"
           borderColor="transparent"
           focusBorderColor="transparent"
           iconColor="white"
           fontWeight="semibold"
-          value={selectedChainId}
-          onChange={(e) => handleChainChange(Number(e.target.value))}
+          value={selectedChainId || "0"}
+          onChange={(e) => handleChainChange(e.target.value)}
         >
-          {supportedNetworks.map((network, index) => (
-            <option key={index} value={network.value}>
-              {network.label}
-            </option>
-          ))}
+          <option value="0" disabled>
+            Select Network
+          </option>
+          <option value="0x7A69">Localhost</option>
+          <option value="0xaa36a7">Sepolia</option>
         </Select>
       </Flex>
 
@@ -81,7 +91,7 @@ const NavBar = () => {
           <Text fontSize="sm">0 ETH</Text>
         )}
       </Flex>
-      {isActive && account ? (
+      {chainId && selectedAccount ? (
         <Flex
           px={3}
           py={2}
@@ -92,13 +102,13 @@ const NavBar = () => {
           alignItems="center"
         >
           <Link
-            href={`${config.chains[selectedChainId].explorerURL}/address/${account}`}
+            href={`${config.chains[chainId].explorerURL}/address/${selectedAccount}`}
             target="_blank"
             rel="noreferrer"
           >
-            <Text fontSize="sm">{shortenAccount(account)}</Text>
+            <Text fontSize="sm">{shortenAccount(selectedAccount)}</Text>
           </Link>
-          <Blockies seed={account} size={7} />
+          <Blockies seed={selectedAccount} size={7} />
         </Flex>
       ) : (
         <Button
@@ -108,9 +118,10 @@ const NavBar = () => {
           variant="outline"
           size="sm"
           ml={2}
-          isLoading={isConnecting}
+          isDisabled={!selectedChainId}
+          isLoading={isActivating}
           loadingText={"Connecting"}
-          onClick={() => connectWallet()}
+          onClick={() => connect()}
         >
           Connect
         </Button>

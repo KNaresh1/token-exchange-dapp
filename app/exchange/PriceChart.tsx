@@ -30,7 +30,7 @@ const PriceChart = () => {
       px={5}
       mt={6}
       bg="secondary"
-      height="24em"
+      height="42%"
       display="flex"
       alignItems="center"
       justifyContent="center"
