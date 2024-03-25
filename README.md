@@ -33,7 +33,7 @@ DApp/mDAI - mock version of dai
 
 ### Testnet
 - Node service provider: INFURA
-- Website is deployed to IPFS using fleek 
+- Website is deployed using Vercel
 
 
 ### Steps to run the app

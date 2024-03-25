@@ -11,7 +11,7 @@ import "./Token.sol";
  * [X] Check Balances
  * [X] Make Order
  * [X] Cancel Orders
- * [X] fill Order
+ * [X] Fill Order
  * [X] Charge Fees
  * [X] Track Fee Account
  */

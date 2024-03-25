@@ -121,11 +121,15 @@ export default function Home() {
       </Stack>
       <Box flex="1" bg="primary" p={5}>
         <NavBar />
+
         <PriceChart />
+
         <HStack>
           <Transactions />
+
           <Trades />
         </HStack>
+
         <OrderBook />
 
         <ShowAlert />
